@@ -150,3 +150,66 @@ sed -i 's+pr2_description+ocs2_robotic_assets/resources/mobile_manipulator/pr2+g
     * Replace all arm joint types from "continuous" to "revolute" with high joint limits
     * Changed all "screw" joints (i.e. `l_gripper_motor_screw_joint`, `r_gripper_motor_screw_joint`, `torso_lift_motor_screw_link`) to fixed joints
     * (optional) Removed all `gazebo` tags, i.e.: `<gazebo>`, `<transmission>`
+
+### Ridgeback-UR5
+
+* In the `src` directory of your catkin workspace, clone the official repository for the [Ridgeback](https://github.com/ridgeback/ridgeback_manipulation):
+
+```bash
+git clone https://github.com/ridgeback/ridgeback_manipulation.git --recursive
+git clone https://github.com/ridgeback/ridgeback.git
+```
+
+* In the `src` directory of your catkin workspace, clone the packages for the arm to use (in this case [UR5](https://www.universal-robots.com/)):
+
+```bash
+vcs import . < ./ridgeback_manipulation/ur.rosinstall
+```
+
+* Resolve all the ROS dependencies (top of your catkin workspace):
+
+```bash
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+* Build the necessary packages and source the workspace:
+
+```bash
+catkin build ur_description ridgeback_description ridgeback_ur_description ocs2_robotic_assets
+
+source devel/setup.bash
+```
+
+* Set the arm to mount on Clearpath Ridgeback base:
+
+```
+source $(rospack find ridgeback_ur_description)/scripts/setup_ridgeback_ur5_envar
+```
+
+* Convert the xacro file to urdf format:
+
+```bash
+rosrun xacro xacro -o $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/urdf/ridgeback_ur5.urdf $(rospack find ridgeback_description)/urdf/ridgeback.urdf.xacro
+```
+
+* Copy all meshes from `pr2_description` to `ocs2_robotic_assets/resources` directory:
+
+```bash
+mkdir -p $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/meshes/base
+mkdir -p $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/meshes/ur5
+cp -r $(rospack find ridgeback_description)/meshes/* $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/meshes/base
+cp -r $(rospack find ur_description)/meshes/ur5/* $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/meshes/ur5
+```
+
+* Replace the meshes locations in the robot's urdf
+
+```bash
+sed -i 's+ridgeback_description/meshes+ocs2_robotic_assets/resources/mobile_manipulator/ridgeback_ur5/meshes/base+g' $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/urdf/ridgeback_ur5.urdf
+sed -i 's+ur_description/meshes/ur5+ocs2_robotic_assets/resources/mobile_manipulator/ridgeback_ur5/meshes/ur5+g' $(rospack find ocs2_robotic_assets)/resources/mobile_manipulator/ridgeback_ur5/urdf/ridgeback_ur5.urdf
+```
+
+* In addition to above, we make the following changes to the URDF Wto make it more readable:
+
+    * Replace all wheel joint types from "continuous" to "fixed"
+    * Replace `front_rocker` joint type from "revolute" to "fixed"
+    * (optional) Removed all `gazebo` tags, i.e.: `<gazebo>`, `<transmission>`
