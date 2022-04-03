@@ -9,11 +9,9 @@ The `ocs2_mobile_manipulator` package supports various robotic arms and wheel-ba
 
 To play-around different model types, you can change the model-information in the `task.info` files.
 
-
-## Examples - URDF
+## Generating assets for mobile manipulators
 
 Over here, we specify the steps involved in creating the URDF used for the examples.
-
 
 ### Franka Panda
 
