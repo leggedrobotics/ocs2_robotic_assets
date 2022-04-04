@@ -1,19 +1,15 @@
 # OCS2 Mobile Manipulator
 
-The `ocs2_mobile_manipulator` package supports various robotic arms and wheel-based mobile manipulators. The system model is determined by parsing the URDF and the task file. Currently, the following system models are supported:
-
-* __Default__ (_value:_ 0): The default system model obtained by parsing the URDF
-* __Actuated dummy wheel-base__ (_value:_ 1): Adds a dummy XY-Yaw joints to the the model parsed from the URDF which are actuated under holonomic constraint (velocity-control)
-* __Unactuated Dummy floating-base__ (_value:_ 2): Adds a dummy XYZ-RPY joints to the the model parsed from the URDF which are unactuated
-* __Actuated Dummy floating-base__ (_value:_ 3): Adds a dummy XYZ-RPY joints to the the model parsed from the URDF which are fully-actuated (velocity-control)
-
-To play-around different model types, you can change the model-information in the `task.info` files.
-
-## Generating assets for mobile manipulators
+The `ocs2_mobile_manipulator` package supports various robotic arms and wheel-based mobile manipulators. The system model is determined by parsing the URDF and the task file.
 
 Over here, we specify the steps involved in creating the URDF used for the examples.
 
-### Franka Panda
+* [Franka Panda](#franka-panda)
+* [Kinova Jaco2](#kinova-jaco2)
+* [Willow Garage PR2](#willow-garage-pr2)
+* [Clearpath Ridgeback with UR-5 arm](#clearpath-ridgeback-with-ur-5)
+
+## Franka Panda
 
 * In the `src` directory of your catkin workspace, clone the official repository of the [Franka Panda](https://www.franka.de/):
 
@@ -62,7 +58,7 @@ sed -i 's+franka_description+ocs2_robotic_assets/resources/mobile_manipulator/fr
   ...
 ```
 
-### Kinova Jaco2
+## Kinova Jaco2
 
 * In the `src` directory of your catkin workspace, clone the official repository of the [Kinova Jaco2](https://assistive.kinovarobotics.com/product/jaco-robotic-arm):
 
@@ -108,7 +104,7 @@ sed -i 's+kinova_description+ocs2_robotic_assets/resources/mobile_manipulator/ki
     * (optional) Removed all `gazebo` tags, i.e.: `<gazebo>`, `<transmission>`
     * (optional) Removed the following links from the chain: `world`
 
-### PR2
+## Willow Garage PR2
 
 * In the `src` directory of your catkin workspace, clone the official repository of the [PR2 robot](https://robots.ieee.org/robots/pr2/):
 
@@ -149,7 +145,7 @@ sed -i 's+pr2_description+ocs2_robotic_assets/resources/mobile_manipulator/pr2+g
     * Changed all "screw" joints (i.e. `l_gripper_motor_screw_joint`, `r_gripper_motor_screw_joint`, `torso_lift_motor_screw_link`) to fixed joints
     * (optional) Removed all `gazebo` tags, i.e.: `<gazebo>`, `<transmission>`
 
-### Ridgeback-UR5
+## Clearpath Ridgeback with UR-5
 
 * In the `src` directory of your catkin workspace, clone the official repository for the [Ridgeback](https://github.com/ridgeback/ridgeback_manipulation):
 
